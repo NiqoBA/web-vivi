@@ -71,12 +71,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ---------- NAV ---------- */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:50;
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  grid-template-areas:"links logo right";
+  align-items:center;
   padding:18px var(--pad);
   transition:background .35s ease, backdrop-filter .35s ease, border-color .35s ease, color .35s ease;
   border-bottom:1px solid transparent;
   color:var(--ink);
 }
+.nav__links{grid-area:links}
+.nav__logo{grid-area:logo}
+.nav__right{grid-area:right}
 .nav.scrolled{
   background:rgba(250,247,241,0.86);
   backdrop-filter:saturate(140%) blur(14px);
@@ -99,12 +105,38 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .nav.over .nav__logo img{filter:brightness(1.05) drop-shadow(0 1px 12px rgba(0,0,0,0.25))}
 .nav.scrolled.over .nav__logo img,
 .nav.scrolled .nav__logo img{filter:none}
-.nav__right{display:flex;align-items:center;justify-content:flex-end;gap:22px;font-size:12px;letter-spacing:0.18em;text-transform:uppercase}
-.nav__cart{display:inline-flex;align-items:center;gap:8px}
-.nav__cart .dot{
-  width:18px;height:18px;border:1px solid currentColor;border-radius:50%;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:10px;letter-spacing:0;
+.nav__right{display:flex;align-items:center;justify-content:flex-end;gap:22px;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;white-space:nowrap}
+
+@media (max-width:900px){
+  .nav{
+    grid-template-columns:1fr auto;
+    grid-template-areas:
+      "logo right"
+      "links links";
+    row-gap:14px;
+    padding:12px 16px;
+  }
+  .nav__links{
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 18px;
+    font-size:11px;
+    letter-spacing:0.14em;
+  }
+  .nav__logo{
+    justify-self:start;
+    height:40px;
+  }
+  .nav__right{
+    gap:14px;
+    font-size:11px;
+  }
+}
+
+@media (max-width:480px){
+  .nav__links{gap:8px 14px;font-size:10px;letter-spacing:0.12em}
+  .nav__logo{height:36px}
+  .nav__right{gap:10px;font-size:10px}
 }
 
 /* nav over hero (inverted) */
@@ -229,7 +261,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   width:max-content;
 }
 .marquee__track span{display:inline-flex;align-items:center;gap:64px}
-.marquee__track span::after{content:"âœ¦";font-style:normal;color:var(--clay)}
+.marquee__track span::after{content:"\2726";font-style:normal;color:var(--clay)}
 @keyframes marquee{
   to{transform:translateX(-50%)}
 }
@@ -708,10 +740,6 @@ body.admin-mode .collection__admin-actions{display:flex}
   </a>
   <div class="nav__right">
     <a href="#" aria-label="Buscar">Buscar</a>
-    <a href="#" class="nav__cart">
-      <span>Bolsa</span>
-      <span class="dot">2</span>
-    </a>
     <a href="#" data-open-admin-login data-guest-only>Admin</a>
     <span data-admin-only hidden style="font-size:11px;opacity:.7">Admin</span>
   </div>
@@ -731,7 +759,6 @@ body.admin-mode .collection__admin-actions{display:flex}
       <div class="hero__eyebrow reveal in">Colección Otoño · Edición 03</div>
       <h1 class="display hero__title reveal in d1" style="font-family: &quot;Times New Roman&quot;">
         Tejido<br>
-        <em>despacio,</em><br>
         a mano.
       </h1>
       <p class="hero__sub reveal in d2">
@@ -885,29 +912,6 @@ MONTEVIDEO, UY</span>
 <section class="quote">
   <p class="reveal">Tu pasión por el crochet: <em>kits, patrones</em> y herramientas hechas con amor.</p>
   <div class="eyebrow reveal d1">Fátima · Fundadora</div>
-</section>
-
-<!-- NEWSLETTER -->
-<section class="section news">
-  <div class="news__inner">
-    <div class="reveal">
-      <div class="eyebrow" style="margin-bottom:24px;display:flex;align-items:center;gap:12px">
-        <span style="width:28px;height:1px;background:currentColor"></span>04 — Diario
-      </div>
-      <h3 class="news__h">Cartas <em>de taller,</em><br>una vez al mes.</h3>
-      <p class="news__p">
-        Avisos de stock nuevo, fotos del proceso, descuentos para quienes nos siguen
-        desde el principio. Sin spam, sin prisa.
-      </p>
-    </div>
-    <form class="form reveal d1" onsubmit="event.preventDefault(); this.querySelector('.form__meta').textContent = 'âœ“ Te escribimos pronto.'">
-      <div class="form__row">
-        <input type="email" placeholder="tu correo" required />
-        <button type="submit">Suscribirme <span class="arrow"></span></button>
-      </div>
-      <div class="form__meta">Solo una carta mensual. Cancelás cuando quieras.</div>
-    </form>
-  </div>
 </section>
 
 <!-- WHATSAPP BAND -->

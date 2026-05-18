@@ -16,8 +16,6 @@ export function AlfaHome() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [heroStock, setHeroStock] = useState('14 piezas disponibles');
   const [catalogVersion, setCatalogVersion] = useState(0);
-  const [newsletterMsg, setNewsletterMsg] = useState('Solo una carta mensual. Cancelás cuando quieras.');
-
   useNavScroll();
   useReveal();
 
@@ -58,10 +56,6 @@ export function AlfaHome() {
           <a href="#" aria-label="Buscar">
             Buscar
           </a>
-          <a href="#" className="nav__cart">
-            <span>Bolsa</span>
-            <span className="dot">2</span>
-          </a>
           {!isAdmin ? (
             <a
               href="#"
@@ -90,8 +84,6 @@ export function AlfaHome() {
               style={{ fontFamily: '"Times New Roman"' }}
             >
               Tejido
-              <br />
-              <em>despacio,</em>
               <br />
               a mano.
             </h1>
@@ -290,40 +282,6 @@ export function AlfaHome() {
         <div className="eyebrow reveal d1">Fátima · Fundadora</div>
       </section>
 
-      <section className="section news">
-        <div className="news__inner">
-          <div className="reveal">
-            <div className="eyebrow" style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ width: 28, height: 1, background: 'currentColor' }} />
-              04 — Diario
-            </div>
-            <h3 className="news__h">
-              Cartas <em>de taller,</em>
-              <br />
-              una vez al mes.
-            </h3>
-            <p className="news__p">
-              Avisos de stock nuevo, fotos del proceso, descuentos para quienes nos siguen desde el
-              principio. Sin spam, sin prisa.
-            </p>
-          </div>
-          <form
-            className="form reveal d1"
-            onSubmit={(e) => {
-              e.preventDefault();
-              setNewsletterMsg('✓ Te escribimos pronto.');
-            }}
-          >
-            <div className="form__row">
-              <input type="email" placeholder="tu correo" required />
-              <button type="submit">
-                Suscribirme <span className="arrow" />
-              </button>
-            </div>
-            <div className="form__meta">{newsletterMsg}</div>
-          </form>
-        </div>
-      </section>
 
       <section className="wapp" id="contacto">
         <div className="wapp__inner" id="wapp">
