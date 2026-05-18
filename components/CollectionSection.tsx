@@ -8,6 +8,8 @@ import { fetchProducts, totalAvailablePieces } from '@/lib/alfa/catalog';
 import { getSupabaseClient } from '@/lib/supabase/client';
 import { dispatchObserveReveals } from '@/hooks/useReveal';
 
+const CATALOG_PREVIEW_LIMIT = 3;
+
 type Props = {
   onEdit: (product: Product) => void;
   onCreate: () => void;
@@ -19,7 +21,13 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  const showPreviewOnly = !isAdmin && !showAll && products.length > CATALOG_PREVIEW_LIMIT;
+  const visibleProducts = showPreviewOnly
+    ? products.slice(0, CATALOG_PREVIEW_LIMIT)
+    : products;
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -47,7 +55,7 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
     if (!loading && gridRef.current) {
       dispatchObserveReveals(gridRef.current);
     }
-  }, [loading, products]);
+  }, [loading, products, showAll]);
 
   async function handleDelete(id: string) {
     if (!confirm('¿Eliminar este producto de forma permanente?')) return;
@@ -108,7 +116,7 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
             No hay productos en la tienda.
           </p>
         ) : (
-          products.map((p) => (
+          visibleProducts.map((p) => (
             <ProductCard
               key={p.id}
               product={p}
@@ -122,11 +130,17 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
           ))
         )}
       </div>
-      <div className="collection__foot reveal">
-        <a href="#" className="btn btn--outline">
-          Ver toda la tienda <span className="arrow" />
-        </a>
-      </div>
+      {showPreviewOnly ? (
+        <div className="collection__foot reveal">
+          <button
+            type="button"
+            className="btn btn--outline"
+            onClick={() => setShowAll(true)}
+          >
+            Ver toda la tienda <span className="arrow" />
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }

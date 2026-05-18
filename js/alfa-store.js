@@ -21,6 +21,9 @@
   const TONES = ['oat', 'cream', 'clay', 'rust', 'bone', 'taupe', 'sand', 'ink'];
   const DEFAULT_LAYOUT = 'product--c';
   const DEFAULT_REVEAL = 'd1';
+  const CATALOG_PREVIEW_LIMIT = 3;
+  let catalogShowAll = false;
+  let catalogProductsCache = [];
 
   function escapeHtml(s) {
     return String(s ?? '')
@@ -170,32 +173,66 @@
     return data || [];
   }
 
+  function updateCollectionFoot(showPreview) {
+    const foot = document.querySelector('.collection__foot');
+    if (foot) foot.hidden = !showPreview;
+  }
+
+  function bindCollectionFoot() {
+    const foot = document.querySelector('.collection__foot');
+    if (!foot || foot._catalogBound) return;
+    foot._catalogBound = true;
+    const btn = foot.querySelector('[data-show-all-catalog], a, button');
+    btn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      catalogShowAll = true;
+      renderCatalogGrid(catalogProductsCache, !!window.alfaAuth?.isAdmin);
+    });
+  }
+
+  function renderCatalogGrid(products, admin) {
+    const grid = document.getElementById('collection-grid');
+    if (!grid) return;
+
+    const showPreview =
+      !admin && !catalogShowAll && products.length > CATALOG_PREVIEW_LIMIT;
+    const visible = showPreview ? products.slice(0, CATALOG_PREVIEW_LIMIT) : products;
+
+    grid.innerHTML = visible.length
+      ? visible.map((p) => renderProduct(p, { admin })).join('')
+      : '<p class="section__lede" style="grid-column:1/-1">No hay productos en la tienda.</p>';
+
+    initProductGalleries(grid);
+    updateCollectionFoot(showPreview);
+
+    if (typeof window.__alfaObserveReveals === 'function') {
+      window.__alfaObserveReveals(grid);
+    }
+  }
+
   async function loadCatalog(admin = false) {
     const grid = document.getElementById('collection-grid');
     if (!grid) return;
 
+    bindCollectionFoot();
     grid.setAttribute('aria-busy', 'true');
     try {
       const products = await fetchProducts(admin);
-      grid.innerHTML = products.length
-        ? products.map((p) => renderProduct(p, { admin })).join('')
-        : '<p class="section__lede" style="grid-column:1/-1">No hay productos en la tienda.</p>';
+      catalogProductsCache = products;
+      if (admin) catalogShowAll = true;
 
-      initProductGalleries(grid);
+      renderCatalogGrid(products, admin);
 
       const total = totalAvailablePieces(products);
       const stockMeta = document.querySelector('[data-hero-stock]');
       if (stockMeta && total > 0) {
         stockMeta.textContent = `${total} pieza${total === 1 ? '' : 's'} disponible${total === 1 ? '' : 's'}`;
       }
-
-      if (typeof window.__alfaObserveReveals === 'function') {
-        window.__alfaObserveReveals(grid);
-      }
     } catch (err) {
       console.error('[alfa-store]', err);
       grid.innerHTML =
         '<p class="section__lede" style="grid-column:1/-1">No pudimos cargar la tienda.</p>';
+      updateCollectionFoot(false);
     } finally {
       grid.removeAttribute('aria-busy');
     }
@@ -247,7 +284,10 @@
     },
   };
 
-  window.addEventListener('alfa:auth', (e) => loadCatalog(e.detail?.isAdmin));
+  window.addEventListener('alfa:auth', (e) => {
+    if (!e.detail?.isAdmin) catalogShowAll = false;
+    loadCatalog(e.detail?.isAdmin);
+  });
 
   if (window.alfaAuth) loadCatalog(window.alfaAuth.isAdmin);
 })();

@@ -88,8 +88,7 @@ export function AlfaHome() {
               a mano.
             </h1>
             <p className="hero__sub reveal in d2">
-              Piezas únicas de crochet, hechas en lotes pequeños con hilados naturales. Cada prenda
-              tarda entre 14 y 40 horas en cobrar forma sobre la falda de quien la teje.
+              Piezas únicas de crochet, hechas en lotes pequeños con hilados naturales.
             </p>
           </div>
           <div className="hero__bottom">
