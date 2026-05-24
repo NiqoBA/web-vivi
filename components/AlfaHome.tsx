@@ -42,7 +42,8 @@ export function AlfaHome() {
         </div>
       ) : null}
 
-      <header className="nav over" id="nav">
+      <div className="site">
+      <header className="nav" id="nav">
         <nav className="nav__links">
           <a href="#tienda">Tienda</a>
           <a href="#historia">Historia</a>
@@ -393,6 +394,7 @@ export function AlfaHome() {
         </svg>
         <span className="lbl">WhatsApp</span>
       </a>
+      </div>
 
       <AdminLoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
       <AdminProductModal

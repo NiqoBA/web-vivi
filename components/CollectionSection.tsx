@@ -23,6 +23,7 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
   const [error, setError] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const showPreviewOnly = !isAdmin && !showAll && products.length > CATALOG_PREVIEW_LIMIT;
   const visibleProducts = showPreviewOnly
@@ -52,8 +53,8 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
   }, [ready, load]);
 
   useEffect(() => {
-    if (!loading && gridRef.current) {
-      dispatchObserveReveals(gridRef.current);
+    if (!loading && sectionRef.current) {
+      dispatchObserveReveals(sectionRef.current);
     }
   }, [loading, products, showAll]);
 
@@ -69,18 +70,18 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
   }
 
   return (
-    <section className="section collection" id="tienda">
+    <section className="section collection" id="tienda" ref={sectionRef}>
       <div className="section__head">
         <div className="section__row">
           <div>
-            <div className="eyebrow reveal">01 — Selección</div>
+            <div className="eyebrow reveal">01 — Tienda</div>
             <h2 className="section__title reveal d1" style={{ marginTop: 18 }}>
-              Piezas en <em>stock,</em>
-              <br />
-              esta semana.
+              Tienda
             </h2>
           </div>
-          <p className="section__lede reveal d2" style={{ fontSize: 9 }} />
+          <p className="section__lede reveal d2">
+            Piezas en stock, esta semana.
+          </p>
         </div>
       </div>
 
@@ -131,13 +132,13 @@ export function CollectionSection({ onEdit, onCreate, onHeroStock }: Props) {
         )}
       </div>
       {showPreviewOnly ? (
-        <div className="collection__foot reveal">
+        <div className="collection__foot reveal in">
           <button
             type="button"
             className="btn btn--outline"
             onClick={() => setShowAll(true)}
           >
-            Ver toda la tienda <span className="arrow" />
+            Ver más <span className="arrow" />
           </button>
         </div>
       ) : null}

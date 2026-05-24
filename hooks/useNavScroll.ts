@@ -14,7 +14,6 @@ export function useNavScroll(navId = 'nav') {
       if (s !== scrolled) {
         scrolled = s;
         nav.classList.toggle('scrolled', s);
-        nav.classList.toggle('over', window.scrollY < window.innerHeight - 100);
       }
       document.querySelectorAll('[data-parallax]').forEach((el) => {
         const k = parseFloat((el as HTMLElement).dataset.parallax || '0') || 0;

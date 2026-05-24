@@ -175,7 +175,9 @@
 
   function updateCollectionFoot(showPreview) {
     const foot = document.querySelector('.collection__foot');
-    if (foot) foot.hidden = !showPreview;
+    if (!foot) return;
+    foot.hidden = !showPreview;
+    if (showPreview) foot.classList.add('in');
   }
 
   function bindCollectionFoot() {
