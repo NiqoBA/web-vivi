@@ -43,37 +43,37 @@ export function AlfaHome() {
       ) : null}
 
       <div className="site">
-      <header className="nav" id="nav">
-        <nav className="nav__links">
-          <a href="#tienda">Tienda</a>
-          <a href="#historia">Historia</a>
-          <a href="#proceso">Proceso</a>
-          <a href="#contacto">Contacto</a>
-        </nav>
-        <a className="nav__logo" href="#" aria-label="Alfa">
-          <img src="/assets/logo.png" alt="Alfa" />
-        </a>
-        <div className="nav__right">
-          <a href="#" aria-label="Buscar">
-            Buscar
-          </a>
-          {!isAdmin ? (
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                setLoginOpen(true);
-              }}
-            >
-              Admin
-            </a>
-          ) : (
-            <span style={{ fontSize: 11, opacity: 0.7 }}>Admin</span>
-          )}
-        </div>
-      </header>
-
       <section className="hero" id="top">
+        <header className="nav over" id="nav">
+          <nav className="nav__links">
+            <a href="#tienda">Tienda</a>
+            <a href="#historia">Historia</a>
+            <a href="#proceso">Proceso</a>
+            <a href="#contacto">Contacto</a>
+          </nav>
+          <a className="nav__logo" href="#" aria-label="Alfa">
+            <img src="/assets/logo.png" alt="Alfa" />
+          </a>
+          <div className="nav__right">
+            <a href="#" aria-label="Buscar">
+              Buscar
+            </a>
+            {!isAdmin ? (
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setLoginOpen(true);
+                }}
+              >
+                Admin
+              </a>
+            ) : (
+              <span style={{ fontSize: 11, opacity: 0.7 }}>Admin</span>
+            )}
+          </div>
+        </header>
+
         <div className="hero__media parallax" data-parallax="0.15">
           <HeroPh />
         </div>

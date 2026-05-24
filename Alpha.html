@@ -71,7 +71,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---------- NAV ---------- */
 .nav{
-  position:relative;z-index:100;
+  position:absolute;top:0;left:0;right:0;z-index:10;
   display:grid;
   grid-template-columns:1fr auto 1fr;
   grid-template-areas:"links logo right";
@@ -79,17 +79,15 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   padding:18px var(--pad);
   transition:background .35s ease, backdrop-filter .35s ease, border-color .35s ease, color .35s ease;
   border-bottom:1px solid transparent;
-  color:var(--ink);
-  background:var(--paper);
+  color:var(--paper);
+  background:transparent;
 }
 .nav__links{grid-area:links}
 .nav__logo{grid-area:logo}
 .nav__right{grid-area:right}
 .nav.scrolled{
-  background:rgba(250,247,241,0.86);
-  backdrop-filter:saturate(140%) blur(14px);
-  -webkit-backdrop-filter:saturate(140%) blur(14px);
-  border-bottom-color:var(--line-soft);
+  background:transparent;
+  border-bottom-color:transparent;
 }
 .nav__links{display:flex;gap:28px;font-size:12px;letter-spacing:0.18em;text-transform:uppercase}
 .nav__links a{position:relative;padding:4px 0}
@@ -143,7 +141,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* nav over hero (inverted) */
 .nav.over{color:var(--paper)}
-.nav.over.scrolled{color:var(--ink)}
+.nav.over.scrolled{color:var(--paper)}
 
 /* ---------- HERO ---------- */
 .hero{
@@ -169,7 +167,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .hero__content{
   position:relative;z-index:1;
   display:grid;grid-template-rows:1fr auto;
-  padding:120px var(--pad) 48px;
+  padding:clamp(160px, 18vw, 200px) var(--pad) 48px;
   min-height:100vh;
   color:var(--paper);
 }
@@ -730,7 +728,10 @@ body.admin-mode .collection__admin-actions{display:flex}
 
 <!-- NAV inside site -->
 <div class="site">
-<header class="nav" id="nav">
+
+<!-- HERO -->
+<section class="hero" id="top">
+<header class="nav over" id="nav">
   <nav class="nav__links">
     <a href="#tienda">Tienda</a>
     <a href="#historia">Historia</a>
@@ -746,9 +747,6 @@ body.admin-mode .collection__admin-actions{display:flex}
     <span data-admin-only hidden style="font-size:11px;opacity:.7">Admin</span>
   </div>
 </header>
-
-<!-- HERO -->
-<section class="hero" id="top">
   <div class="hero__media parallax" data-parallax="0.15">
     <div class="ph" data-tone="sand">
       <span class="ph__corner">ALFA / SS25</span>
@@ -1102,6 +1100,7 @@ MONTEVIDEO, UY</span>
     if (s !== scrolled){
       scrolled = s;
       nav.classList.toggle('scrolled', s);
+      nav.classList.toggle('over', window.scrollY < window.innerHeight - 100);
     }
     // parallax
     document.querySelectorAll('[data-parallax]').forEach(el=>{
